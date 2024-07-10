@@ -5,7 +5,10 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        BankManager bankManager = new BankManager();
+        String clientListFilePath = "data/client-list.txt"; // Path to your client list file
+        String clientDataDirectory = "data/clientData"; // Directory for individual client data files
+
+        BankManager bankManager = new BankManager(clientListFilePath, clientDataDirectory);
 
         List<String> questions = List.of(
                 "Please enter your First Name",
@@ -36,7 +39,7 @@ public class Main {
 
         // Test deposit method
         long accountNumber = client.getAccountNumber();
-        bankManager.deposit(accountNumber, 200.0);
+        bankManager.deposit(accountNumber, 2000.0);
         System.out.println("Balance after deposit: " + bankManager.getAccountBalance(accountNumber));
 
         // Test withdraw method
@@ -44,7 +47,7 @@ public class Main {
         System.out.println("Balance after withdrawal: " + bankManager.getAccountBalance(accountNumber));
 
         // Test transfer funds method
-        Client anotherClient = new Client("Alice", "Wonderland", "alice@example.com", "555-9876");
+        Client anotherClient = new Client("John", "Doe", "john.doe@example.com", "555-9876");
         bankManager.addClient(anotherClient, false); // Adding a savings account
         long anotherAccountNumber = anotherClient.getAccountNumber();
         bankManager.transferFunds(accountNumber, anotherAccountNumber, 50.0);
