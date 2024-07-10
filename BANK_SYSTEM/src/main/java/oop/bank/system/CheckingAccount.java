@@ -1,5 +1,4 @@
 package oop.bank.system;
-package org.oop.bank_system;
 
 public class CheckingAccount extends BankAccount implements IArchive {
     private double overdraftLimit;
@@ -19,7 +18,7 @@ public class CheckingAccount extends BankAccount implements IArchive {
             archiveTransaction("Withdrawal: " + amount);
             isWithdraw = true;
         } else {
-            throw new Exception("Withdrawal amount must be positive or within the overdraft limit!!!!");
+            throw new BankSystemException("Withdrawal amount must be positive or within the overdraft limit!!!!");
         }
         return isWithdraw;
     }
