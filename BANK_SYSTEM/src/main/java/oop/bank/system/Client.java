@@ -1,7 +1,7 @@
 package oop.bank.system;
 
 public class Client {
-    private long accountNumber; // Using long for account numbers due to their potentially large size
+    private long accountNumber;
     private String firstName;
     private String lastName;
     private String email;
@@ -14,16 +14,13 @@ public class Client {
         this.email = email;
         this.phone = phone;
     }
+
     public Client(String firstName, String lastName, String email, String phone) {
-        this.accountNumber = 0;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
+        this(0, firstName, lastName, email, phone); // Initialize with accountNumber as 0 for new clients
     }
 
     public String getFullName() {
-        return firstName + " " + lastName; // Concatenate first name and last name for full name
+        return firstName + " " + lastName;
     }
 
     public long getAccountNumber() {
@@ -65,5 +62,22 @@ public class Client {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-}
 
+    @Override
+    public String toString() {
+        return accountNumber + "," + firstName + "," + lastName + "," + email + "," + phone;
+    }
+
+    public static Client fromString(String clientString) {
+        String[] parts = clientString.split(",");
+        if (parts.length != 5) {
+            throw new IllegalArgumentException("Invalid client string: " + clientString);
+        }
+        long accountNumber = Long.parseLong(parts[0]);
+        String firstName = parts[1];
+        String lastName = parts[2];
+        String email = parts[3];
+        String phone = parts[4];
+        return new Client(accountNumber, firstName, lastName, email, phone);
+    }
+}

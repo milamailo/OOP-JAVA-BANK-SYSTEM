@@ -1,0 +1,5 @@
+Account Number: 8705078476
+Account Holder: John Doe
+Email: john@example.com
+Phone: 555-9876
+Initial Data: Balance: 0.0

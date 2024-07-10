@@ -9,18 +9,26 @@ public class BankManager {
     private List<Client> clients;
     private List<BankAccount> accounts;
     private Random random;
+    private IOHandling ioHandling;
 
-    public BankManager() {
+    public BankManager(String clientListFilePath, String clientDataDirectory) {
         this.clients = new ArrayList<>();
         this.accounts = new ArrayList<>();
         this.random = new Random();
+        this.ioHandling = new IOHandling(clientListFilePath, clientDataDirectory);
         initializeClientsAndAccounts();
     }
 
     private void initializeClientsAndAccounts() {
-        // Add some default data just for testing
-        addClient(new Client("John", "Doe", "john.doe@example.com", "555-1234"), true);
-        addClient(new Client("Jane", "Smith", "jane.smith@example.com", "555-5678"), false);
+        ioHandling.readClientList();
+        List<String> clientData = ioHandling.getClientList();
+        for (String data : clientData) {
+            Client client = Client.fromString(data);
+            clients.add(client);
+            // Add corresponding account (this assumes a default account type; you can enhance it further)
+            BankAccount account = new CheckingAccount(client.getAccountNumber(), client.getFullName(), 200, 100);
+            accounts.add(account);
+        }
     }
 
     private long generateUniqueAccountNumber() {
@@ -43,6 +51,13 @@ public class BankManager {
             account = new SavingsAccount(client.getAccountNumber(), client.getFullName(), 0.5, 50);
         }
         accounts.add(account);
+
+        // Save client to file
+        ioHandling.writeClientToList(client);
+
+        // Save initial client data to individual file
+        String initialData = "Balance: " + account.getBalance();
+        ioHandling.writeClientData(client, initialData);
     }
 
     public boolean removeClient(long accountNumber) {
