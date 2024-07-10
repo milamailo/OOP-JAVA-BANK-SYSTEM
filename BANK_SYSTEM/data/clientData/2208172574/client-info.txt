@@ -1,5 +1,0 @@
-Account Number: 2208172574
-Account Holder: rich r
-Email: 
-Phone: 344323
-Initial Data: Balance: 0.0

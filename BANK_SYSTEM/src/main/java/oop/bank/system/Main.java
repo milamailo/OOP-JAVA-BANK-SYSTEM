@@ -47,7 +47,7 @@ public class Main {
         System.out.println("Balance after withdrawal: " + bankManager.getAccountBalance(accountNumber));
 
         // Test transfer funds method
-        Client anotherClient = new Client("Alice", "Wonderland", "alice@example.com", "555-9876");
+        Client anotherClient = new Client("John", "Doe", "john.doe@example.com", "555-9876");
         bankManager.addClient(anotherClient, false); // Adding a savings account
         long anotherAccountNumber = anotherClient.getAccountNumber();
         bankManager.transferFunds(accountNumber, anotherAccountNumber, 50.0);

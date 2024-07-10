@@ -1,4 +1,0 @@
-6453683697,m13,i3th,i3th@,33344455
-2973878674,Alice,Wonderland,alice@example.com,555-9876
-2208172574,rich,r,,344323
-7021471747,Alice,Wonderland,alice@example.com,555-9876
