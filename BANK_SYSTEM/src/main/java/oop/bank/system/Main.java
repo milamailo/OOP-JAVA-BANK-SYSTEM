@@ -14,25 +14,31 @@ public class Main {
         List<String> questions = new ArrayList<>();
         questions.add("Please enter your First Name");
         questions.add("Please enter your Last Name");
+        questions.add("Please enter your Email");
+        questions.add("Please enter your Phone");
 
         // Create a UserInput object
         UserInput userInput = new UserInput(questions);
         userInput.askQuestions();
 
-        // Construct the accountHolder string using StringBuilder
-        StringBuilder accountHolderBuilder = new StringBuilder();
-        boolean first = true;
-        for (String question : questions) {
-            if (!first) {
-                accountHolderBuilder.append(" ");
-            }
-            accountHolderBuilder.append(userInput.getQuestionsAndAnswers().get(question));
-            first = false;
-        }
-        String accountHolder = accountHolderBuilder.toString();
+        // Get the user inputs
+        Map<String, String> userInputs = userInput.getQuestionsAndAnswers();
+        String firstName = userInputs.get("Please enter your First Name");
+        String lastName = userInputs.get("Please enter your Last Name");
+        String email = userInputs.get("Please enter your Email");
+        String phone = userInputs.get("Please enter your Phone");
+
+        // Create a Client object
+        Client client = new Client(accountNumber, firstName, lastName, email, phone);
 
         // Create a CheckingAccount object
-        CheckingAccount checkingAccount = new CheckingAccount(accountNumber, accountHolder, overdraftLimit, annualFee);
+        CheckingAccount checkingAccount = new CheckingAccount(accountNumber, client.getFullName(), overdraftLimit, annualFee);
+
+        // Print client details
+        System.out.println("Client Details:");
+        System.out.println("Full Name: " + client.getFullName());
+        System.out.println("Email: " + client.getEmail());
+        System.out.println("Phone: " + client.getPhone());
 
         // Print initial balance and account details
         System.out.println("Initial balance: " + checkingAccount.getBalance());
@@ -48,8 +54,10 @@ public class Main {
             boolean withdrawSuccess = checkingAccount.withdraw(600.0); // Test overdraft
             System.out.println("Withdraw successful: " + withdrawSuccess);
             System.out.println("Balance after withdrawal: " + checkingAccount.getBalance());
-        } catch (Exception e) {
+        } catch (BankSystemException e) {
             System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred: " + e.getMessage());
         }
 
         // Test withdraw method with insufficient funds
@@ -57,8 +65,10 @@ public class Main {
             boolean withdrawSuccess = checkingAccount.withdraw(1000.0); // Exceeds overdraft limit
             System.out.println("Withdraw successful: " + withdrawSuccess);
             System.out.println("Balance after withdrawal: " + checkingAccount.getBalance());
-        } catch (Exception e) {
+        } catch (BankSystemException e) {
             System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred: " + e.getMessage());
         }
 
         // Print account summary
