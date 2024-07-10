@@ -38,7 +38,7 @@ public abstract class BankAccount {
             notifyAccountActivity("Withdrawn: " + amount + "; New Balance: " + balance);
             return true;
         } else {
-            throw new Exception("Insufficient balance or invalid amount.");
+            throw new BankSystemException("Insufficient balance or invalid amount.");
         }
     }
 
