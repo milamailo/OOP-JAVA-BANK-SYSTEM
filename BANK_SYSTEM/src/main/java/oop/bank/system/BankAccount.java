@@ -1,6 +1,6 @@
 package oop.bank.system;
 
-public  class BankAccount {
+public abstract class BankAccount {
     private long accountNumber;
     private String accountHolder;
     protected double balance;
@@ -12,11 +12,18 @@ public  class BankAccount {
         this.annualFees = annualFees;
     }
 
+    public abstract void accountSummary();  // Abstract method for account summary
 
+    public abstract void notifyAccountActivity(String message);
+
+    public abstract double calculateAnnualFees();
+
+    public abstract double minimumBalanceRequired();
 
     public boolean deposit(double amount) {
         if (amount > 0) {
             balance += amount;
+            notifyAccountActivity("Deposited: " + amount + "; New Balance: " + balance);
             return true;
         } else {
             return false;
@@ -26,6 +33,7 @@ public  class BankAccount {
     public boolean withdraw(double amount) throws Exception {
         if (amount > 0 && balance >= amount) {
             balance -= amount;
+            notifyAccountActivity("Withdrawn: " + amount + "; New Balance: " + balance);
             return true;
         } else {
             throw new Exception("Insufficient balance or invalid amount.");
