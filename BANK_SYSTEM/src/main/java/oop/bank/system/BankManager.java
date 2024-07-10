@@ -19,11 +19,11 @@ public class BankManager {
 
     private void initializeClientsAndAccounts() {
         // Add some default data just for testing
-        addClient(new Client(generateUniqueAccountNumber(), "John", "Doe", "john.doe@example.com", "555-1234"), true);
-        addClient(new Client(generateUniqueAccountNumber(), "Jane", "Smith", "jane.smith@example.com", "555-5678"), false);
+        addClient(new Client("John", "Doe", "john.doe@example.com", "555-1234"), true);
+        addClient(new Client("Jane", "Smith", "jane.smith@example.com", "555-5678"), false);
     }
 
-    public long generateUniqueAccountNumber() {
+    private long generateUniqueAccountNumber() {
         long accountNumber;
         do {
             accountNumber = (long) (random.nextDouble() * 9999999999L + 1000000000L);
@@ -32,10 +32,8 @@ public class BankManager {
     }
 
     public void addClient(Client client, boolean isCheckingAccount) {
-        if (findAccountByNumber(client.getAccountNumber()).isPresent()) {
-            System.err.println("Account number " + client.getAccountNumber() + " already exists. Client not added.");
-            return;
-        }
+        long accountNumber = generateUniqueAccountNumber();
+        client.setAccountNumber(accountNumber);
 
         clients.add(client);
         BankAccount account;

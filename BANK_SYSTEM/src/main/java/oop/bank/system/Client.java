@@ -14,6 +14,13 @@ public class Client {
         this.email = email;
         this.phone = phone;
     }
+    public Client(String firstName, String lastName, String email, String phone) {
+        this.accountNumber = 0;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+    }
 
     public String getFullName() {
         return firstName + " " + lastName; // Concatenate first name and last name for full name
@@ -21,6 +28,10 @@ public class Client {
 
     public long getAccountNumber() {
         return accountNumber;
+    }
+
+    public void setAccountNumber(long accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public String getFirstName() {

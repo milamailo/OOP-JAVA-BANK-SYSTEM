@@ -25,11 +25,8 @@ public class Main {
         String email = userInputs.get("Please enter your Email");
         String phone = userInputs.get("Please enter your Phone");
 
-        // Generate a unique account number
-        long accountNumber = bankManager.generateUniqueAccountNumber();
-
         // Create a Client object
-        Client client = new Client(accountNumber, firstName, lastName, email, phone);
+        Client client = new Client(firstName, lastName, email, phone);
 
         // Add the client to the bank manager
         bankManager.addClient(client, true); // For example, adding a checking account
@@ -38,6 +35,7 @@ public class Main {
         bankManager.printAccountSummaries();
 
         // Test deposit method
+        long accountNumber = client.getAccountNumber();
         bankManager.deposit(accountNumber, 200.0);
         System.out.println("Balance after deposit: " + bankManager.getAccountBalance(accountNumber));
 
@@ -46,9 +44,9 @@ public class Main {
         System.out.println("Balance after withdrawal: " + bankManager.getAccountBalance(accountNumber));
 
         // Test transfer funds method
-        long anotherAccountNumber = bankManager.generateUniqueAccountNumber();
-        Client anotherClient = new Client(anotherAccountNumber, "Alice", "Wonderland", "alice@example.com", "555-9876");
+        Client anotherClient = new Client("Alice", "Wonderland", "alice@example.com", "555-9876");
         bankManager.addClient(anotherClient, false); // Adding a savings account
+        long anotherAccountNumber = anotherClient.getAccountNumber();
         bankManager.transferFunds(accountNumber, anotherAccountNumber, 50.0);
         System.out.println("Balance after transfer for account " + accountNumber + ": " + bankManager.getAccountBalance(accountNumber));
         System.out.println("Balance after transfer for account " + anotherAccountNumber + ": " + bankManager.getAccountBalance(anotherAccountNumber));
