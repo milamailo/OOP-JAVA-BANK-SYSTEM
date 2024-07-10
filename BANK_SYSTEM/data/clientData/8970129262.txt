@@ -1,5 +1,0 @@
-Account Number: 8970129262
-Account Holder: mahdi es
-Email: m.es@cctt.ca
-Phone: 4446543
-Initial Data: Balance: 0.0

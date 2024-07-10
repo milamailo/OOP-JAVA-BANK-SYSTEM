@@ -71,7 +71,22 @@ public class IOHandling {
     }
 
     public void writeClientData(Client client, String initialData) {
-        String clientFilePath = clientDataDirectory + "/" + client.getAccountNumber() + ".txt";
+        String clientFolderPath = clientDataDirectory + "/" + client.getAccountNumber();
+        String clientFilePath = clientFolderPath + "/client-info.txt";
+
+        // Create client folder
+        Path path = Paths.get(clientFolderPath);
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path);
+                System.out.println("Client folder created: " + clientFolderPath);
+            } catch (IOException e) {
+                System.out.println("Failed to create client folder.");
+                e.printStackTrace();
+            }
+        }
+
+        // Write client data to client-info.txt
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(clientFilePath))) {
             writer.write("Account Number: " + client.getAccountNumber());
             writer.newLine();

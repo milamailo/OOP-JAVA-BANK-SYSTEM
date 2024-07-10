@@ -1,0 +1,5 @@
+Account Number: 2973878674
+Account Holder: Alice Wonderland
+Email: alice@example.com
+Phone: 555-9876
+Initial Data: Balance: 0.0

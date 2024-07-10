@@ -37,9 +37,9 @@ public class Main {
         // Print all account summaries
         bankManager.printAccountSummaries();
 
-//        // Test deposit method
+        // Test deposit method
         long accountNumber = client.getAccountNumber();
-        bankManager.deposit(accountNumber, 200.0);
+        bankManager.deposit(accountNumber, 2000.0);
         System.out.println("Balance after deposit: " + bankManager.getAccountBalance(accountNumber));
 
         // Test withdraw method
@@ -47,7 +47,7 @@ public class Main {
         System.out.println("Balance after withdrawal: " + bankManager.getAccountBalance(accountNumber));
 
         // Test transfer funds method
-        Client anotherClient = new Client("John", "Doe", "john@example.com", "555-9876");
+        Client anotherClient = new Client("Alice", "Wonderland", "alice@example.com", "555-9876");
         bankManager.addClient(anotherClient, false); // Adding a savings account
         long anotherAccountNumber = anotherClient.getAccountNumber();
         bankManager.transferFunds(accountNumber, anotherAccountNumber, 50.0);
@@ -75,7 +75,5 @@ public class Main {
         for (Client c : foundClients) {
             System.out.println("Client Name: " + c.getFullName() + ", Email: " + c.getEmail() + ", Phone: " + c.getPhone());
         }
-
-        bankManager.printAccountSummaries();
     }
 }

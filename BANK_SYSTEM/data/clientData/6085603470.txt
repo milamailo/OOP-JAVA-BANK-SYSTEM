@@ -1,5 +1,0 @@
-Account Number: 6085603470
-Account Holder: hhhh hhhh
-Email: @hhh
-Phone: 66666
-Initial Data: Balance: 0.0
