@@ -1,67 +1,78 @@
 package oop.bank.system;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        double annualFee = 100.0;
-        long accountNumber = (long) (Math.random() * 9999999999L + 1000000000L);
-        double interestRate = 1.5;
-        double overdraftLimit = 500.0;
+        BankManager bankManager = new BankManager();
 
-        List<String> questions = new ArrayList<>();
-        questions.add("Please enter your First Name");
-        questions.add("Please enter your Last Name");
+        List<String> questions = List.of(
+                "Please enter your First Name",
+                "Please enter your Last Name",
+                "Please enter your Email",
+                "Please enter your Phone"
+        );
 
         // Create a UserInput object
         UserInput userInput = new UserInput(questions);
         userInput.askQuestions();
 
-        // Construct the accountHolder string using StringBuilder
-        StringBuilder accountHolderBuilder = new StringBuilder();
-        boolean first = true;
-        for (String question : questions) {
-            if (!first) {
-                accountHolderBuilder.append(" ");
-            }
-            accountHolderBuilder.append(userInput.getQuestionsAndAnswers().get(question));
-            first = false;
-        }
-        String accountHolder = accountHolderBuilder.toString();
+        // Get the user inputs
+        Map<String, String> userInputs = userInput.getQuestionsAndAnswers();
+        String firstName = userInputs.get("Please enter your First Name");
+        String lastName = userInputs.get("Please enter your Last Name");
+        String email = userInputs.get("Please enter your Email");
+        String phone = userInputs.get("Please enter your Phone");
 
-        // Create a CheckingAccount object
-        CheckingAccount checkingAccount = new CheckingAccount(accountNumber, accountHolder, overdraftLimit, annualFee);
+        // Generate a unique account number
+        long accountNumber = bankManager.generateUniqueAccountNumber();
 
-        // Print initial balance and account details
-        System.out.println("Initial balance: " + checkingAccount.getBalance());
-        checkingAccount.accountSummary();
+        // Create a Client object
+        Client client = new Client(accountNumber, firstName, lastName, email, phone);
+
+        // Add the client to the bank manager
+        bankManager.addClient(client, true); // For example, adding a checking account
+
+        // Print all account summaries
+        bankManager.printAccountSummaries();
 
         // Test deposit method
-        boolean depositSuccess = checkingAccount.deposit(200.0);
-        System.out.println("Deposit successful: " + depositSuccess);
-        System.out.println("Balance after deposit: " + checkingAccount.getBalance());
+        bankManager.deposit(accountNumber, 200.0);
+        System.out.println("Balance after deposit: " + bankManager.getAccountBalance(accountNumber));
 
-        // Test withdraw method within overdraft limit
-        try {
-            boolean withdrawSuccess = checkingAccount.withdraw(600.0); // Test overdraft
-            System.out.println("Withdraw successful: " + withdrawSuccess);
-            System.out.println("Balance after withdrawal: " + checkingAccount.getBalance());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        // Test withdraw method
+        bankManager.withdraw(accountNumber, 100.0);
+        System.out.println("Balance after withdrawal: " + bankManager.getAccountBalance(accountNumber));
+
+        // Test transfer funds method
+        long anotherAccountNumber = bankManager.generateUniqueAccountNumber();
+        Client anotherClient = new Client(anotherAccountNumber, "Alice", "Wonderland", "alice@example.com", "555-9876");
+        bankManager.addClient(anotherClient, false); // Adding a savings account
+        bankManager.transferFunds(accountNumber, anotherAccountNumber, 50.0);
+        System.out.println("Balance after transfer for account " + accountNumber + ": " + bankManager.getAccountBalance(accountNumber));
+        System.out.println("Balance after transfer for account " + anotherAccountNumber + ": " + bankManager.getAccountBalance(anotherAccountNumber));
+
+        // Print updated account summaries
+        bankManager.printAccountSummaries();
+
+        // Test remove client method
+        bankManager.removeClient(accountNumber);
+        bankManager.printAccountSummaries();
+
+        // Test update client method
+        bankManager.updateClient(anotherAccountNumber, "Alice", "Updated", "alice.updated@example.com", "555-0000");
+        List<Client> allClients = bankManager.listAllClients();
+        System.out.println("Updated client list:");
+        for (Client c : allClients) {
+            System.out.println("Client Name: " + c.getFullName() + ", Email: " + c.getEmail() + ", Phone: " + c.getPhone());
         }
 
-        // Test withdraw method with insufficient funds
-        try {
-            boolean withdrawSuccess = checkingAccount.withdraw(1000.0); // Exceeds overdraft limit
-            System.out.println("Withdraw successful: " + withdrawSuccess);
-            System.out.println("Balance after withdrawal: " + checkingAccount.getBalance());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        // Test find client by name
+        List<Client> foundClients = bankManager.findClientByName("Alice Updated");
+        System.out.println("Found client(s):");
+        for (Client c : foundClients) {
+            System.out.println("Client Name: " + c.getFullName() + ", Email: " + c.getEmail() + ", Phone: " + c.getPhone());
         }
-
-        // Print account summary
-        checkingAccount.accountSummary();
     }
 }
