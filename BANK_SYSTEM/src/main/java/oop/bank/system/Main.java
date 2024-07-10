@@ -2,7 +2,6 @@ package oop.bank.system;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -26,7 +25,8 @@ public class Main {
         String email = userInputs.get("Please enter your Email");
         String phone = userInputs.get("Please enter your Phone");
 
-        long accountNumber = (long) (Math.random() * 9999999999L + 1000000000L);
+        // Generate a unique account number
+        long accountNumber = bankManager.generateUniqueAccountNumber();
 
         // Create a Client object
         Client client = new Client(accountNumber, firstName, lastName, email, phone);
@@ -46,7 +46,7 @@ public class Main {
         System.out.println("Balance after withdrawal: " + bankManager.getAccountBalance(accountNumber));
 
         // Test transfer funds method
-        long anotherAccountNumber = (long) (Math.random() * 9999999999L + 1000000000L);
+        long anotherAccountNumber = bankManager.generateUniqueAccountNumber();
         Client anotherClient = new Client(anotherAccountNumber, "Alice", "Wonderland", "alice@example.com", "555-9876");
         bankManager.addClient(anotherClient, false); // Adding a savings account
         bankManager.transferFunds(accountNumber, anotherAccountNumber, 50.0);

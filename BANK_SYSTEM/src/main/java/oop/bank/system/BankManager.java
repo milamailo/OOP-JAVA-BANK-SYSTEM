@@ -3,27 +3,40 @@ package oop.bank.system;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 public class BankManager {
     private List<Client> clients;
     private List<BankAccount> accounts;
+    private Random random;
 
     public BankManager() {
         this.clients = new ArrayList<>();
         this.accounts = new ArrayList<>();
+        this.random = new Random();
         initializeClientsAndAccounts();
     }
 
     private void initializeClientsAndAccounts() {
         // Add some default data just for testing
-        Client client1 = new Client(1000000001L, "John", "Doe", "john.doe@example.com", "555-1234");
-        Client client2 = new Client(1000000002L, "Jane", "Smith", "jane.smith@example.com", "555-5678");
-        addClient(client1, true);
-        addClient(client2, false);
+        addClient(new Client(generateUniqueAccountNumber(), "John", "Doe", "john.doe@example.com", "555-1234"), true);
+        addClient(new Client(generateUniqueAccountNumber(), "Jane", "Smith", "jane.smith@example.com", "555-5678"), false);
+    }
+
+    public long generateUniqueAccountNumber() {
+        long accountNumber;
+        do {
+            accountNumber = (long) (random.nextDouble() * 9999999999L + 1000000000L);
+        } while (findAccountByNumber(accountNumber).isPresent());
+        return accountNumber;
     }
 
     public void addClient(Client client, boolean isCheckingAccount) {
+        if (findAccountByNumber(client.getAccountNumber()).isPresent()) {
+            System.err.println("Account number " + client.getAccountNumber() + " already exists. Client not added.");
+            return;
+        }
+
         clients.add(client);
         BankAccount account;
         if (isCheckingAccount) {
@@ -90,15 +103,22 @@ public class BankManager {
     }
 
     public List<Client> findClientByName(String name) {
-        return clients.stream()
-                .filter(client -> client.getFullName().equalsIgnoreCase(name))
-                .collect(Collectors.toList());
+        List<Client> foundClients = new ArrayList<>();
+        for (Client client : clients) {
+            if (client.getFullName().equalsIgnoreCase(name)) {
+                foundClients.add(client);
+            }
+        }
+        return foundClients;
     }
 
     public Optional<BankAccount> findAccountByNumber(long accountNumber) {
-        return accounts.stream()
-                .filter(account -> account.getAccountNumber() == accountNumber)
-                .findFirst();
+        for (BankAccount account : accounts) {
+            if (account.getAccountNumber() == accountNumber) {
+                return Optional.of(account);
+            }
+        }
+        return Optional.empty();
     }
 
     public boolean deposit(long accountNumber, double amount) {
