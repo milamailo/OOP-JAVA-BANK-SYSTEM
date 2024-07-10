@@ -3,12 +3,14 @@ package oop.bank.system;
 public abstract class BankAccount {
     private long accountNumber;
     private String accountHolder;
+    private String accountType;  // New property
     protected double balance;
     protected double annualFees;
 
-    public BankAccount(long accountNumber, String accountHolder, double annualFees) {
+    public BankAccount(long accountNumber, String accountHolder, String accountType, double annualFees) {
         this.accountNumber = accountNumber;
         this.accountHolder = accountHolder;
+        this.accountType = accountType;
         this.annualFees = annualFees;
     }
 
@@ -50,6 +52,10 @@ public abstract class BankAccount {
 
     public String getAccountHolder() {
         return accountHolder;
+    }
+
+    public String getAccountType() {
+        return accountType;
     }
 
     public double getAnnualFees() {
