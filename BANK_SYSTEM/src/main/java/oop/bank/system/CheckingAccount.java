@@ -10,17 +10,14 @@ public class CheckingAccount extends BankAccount implements IArchive {
 
     @Override
     public boolean withdraw(double amount) throws Exception {
-        boolean isWithdraw = false;
         if (amount > 0 && balance + overdraftLimit >= amount) {
             balance -= amount;
-            System.out.println("Withdrawal of " + amount + " made. New balance is " + balance);
             notifyAccountActivity("Withdrawal of " + amount + " made. New balance is " + balance);
             archiveTransaction("Withdrawal: " + amount);
-            isWithdraw = true;
+            return true;
         } else {
-            throw new BankSystemException("Withdrawal amount must be positive or within the overdraft limit!!!!");
+            throw new BankSystemException("Insufficient balance or invalid amount.");
         }
-        return isWithdraw;
     }
 
     @Override
@@ -37,12 +34,12 @@ public class CheckingAccount extends BankAccount implements IArchive {
 
     @Override
     public double calculateAnnualFees() {
-        return getAnnualFees(); // Higher annual fee due to overdraft facility
+        return getAnnualFees();
     }
 
     @Override
     public double minimumBalanceRequired() {
-        return 0; // No minimum balance required
+        return 0;
     }
 
     @Override

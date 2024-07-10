@@ -7,11 +7,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to handle input and output operations for client data.
+ */
 public class IOHandling {
-    private String clientListFilePath;
-    private String clientDataDirectory;
-    private List<String> clientList;
+    private String clientListFilePath; // Path to the client list file
+    private String clientDataDirectory; // Directory for individual client data files
+    private List<String> clientList; // List to store client data
 
+    /**
+     * Constructor for IOHandling.
+     * @param clientListFilePath Path to the client list file
+     * @param clientDataDirectory Directory for individual client data files
+     */
     public IOHandling(String clientListFilePath, String clientDataDirectory) {
         this.clientListFilePath = clientListFilePath;
         this.clientDataDirectory = clientDataDirectory;
@@ -70,7 +78,7 @@ public class IOHandling {
         }
     }
 
-    public void writeClientData(Client client, String initialData) {
+    public void writeClientData(Client client, double balance) {
         String clientFolderPath = clientDataDirectory + "/" + client.getAccountNumber();
         String clientFilePath = clientFolderPath + "/client-info.txt";
 
@@ -96,7 +104,7 @@ public class IOHandling {
             writer.newLine();
             writer.write("Phone: " + client.getPhone());
             writer.newLine();
-            writer.write("Initial Data: " + initialData);
+            writer.write("Balance: " + balance);
             writer.newLine();
             System.out.println("Client data written to file: " + clientFilePath);
         } catch (IOException e) {

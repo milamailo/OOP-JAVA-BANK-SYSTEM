@@ -3,6 +3,9 @@ package oop.bank.system;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Main class to test the banking system.
+ */
 public class Main {
     public static void main(String[] args) {
         String clientListFilePath = "data/client-list.txt"; // Path to your client list file
@@ -38,6 +41,8 @@ public class Main {
         bankManager.printAccountSummaries();
 
         // Test deposit method
+        bankManager.deposit(9291689999L, 2013.0);
+
         long accountNumber = client.getAccountNumber();
         bankManager.deposit(accountNumber, 2000.0);
         System.out.println("Balance after deposit: " + bankManager.getAccountBalance(accountNumber));
