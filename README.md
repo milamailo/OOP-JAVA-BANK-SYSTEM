@@ -33,17 +33,20 @@ This application simulates a banking system where users can manage different typ
 ### Installation
 
 1. Clone the repository:
-   ```sh
+   
    HTTPS:
+   ```sh
    https://github.com/milamailo/OOP-JAVA-BANK-SYSTEM.git
-   SSH
+   ```
+   SSH:
+   ```sh
    git@github.com:milamailo/OOP-JAVA-BANK-SYSTEM.git
    ```
-2. Navigate to the project directory:
+3. Navigate to the project directory:
    ```sh
    cd bank-system
    ```
-3. Open the project in your preferred IDE and build the project.
+4. Open the project in your preferred IDE and build the project.
 
 ## Usage
 
