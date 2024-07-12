@@ -21,7 +21,7 @@ This application simulates a banking system where users can manage different typ
 
 ## Class Diagram
 
-![UML Diagram](path/to/uml_diagram.png)
+![UML Diagram](uml_diagram_bank_system_final.pdf)
 
 ## Getting Started
 
