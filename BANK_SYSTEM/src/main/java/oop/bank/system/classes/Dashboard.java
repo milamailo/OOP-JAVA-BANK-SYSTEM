@@ -4,15 +4,26 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * The Dashboard class provides a text-based user interface for interacting with the banking system.
+ */
 public class Dashboard {
     private BankManager bankManager;
     private Scanner scanner;
 
+    /**
+     * Constructor initializes the Dashboard with a reference to a BankManager.
+     * @param bankManager The bank manager that handles business logic.
+     */
     public Dashboard(BankManager bankManager) {
         this.bankManager = bankManager;
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Displays the main menu and handles user interaction.
+     * Handles user selection from the main menu.
+     */
     public void displayMenu() {
         String choice;
         do {
@@ -68,6 +79,7 @@ public class Dashboard {
         } while (!choice.equals("0"));
     }
 
+    // Handlers methods, called inside the menu options
     private void addNewClient() {
         UserInput userInput = new UserInput(Arrays.asList("First Name", "Last Name", "Email", "Phone", "Account Type (1 for Checking, 2 for Savings)"));
         userInput.askQuestions();
@@ -173,6 +185,10 @@ public class Dashboard {
         bankManager.printAccountSummaries();
         pressAnyKeyToContinue();
     }
+
+    /**
+     * Clears the console screen depending on the operating system.
+     */
     private void clearScreen() {
         try {
             final String os = System.getProperty("os.name");
@@ -186,6 +202,9 @@ public class Dashboard {
         }
     }
 
+    /**
+     * Waits for the user to press Enter to continue.
+     */
     private void pressAnyKeyToContinue() {
         System.out.println("Press Enter key to continue...");
         clearInputBuffer();
