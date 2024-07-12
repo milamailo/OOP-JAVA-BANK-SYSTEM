@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to handle input and output operations for client data.
+ * Manages input and output operations related to client data, handling file creation, reading, and writing.
  */
 public class IOHandling {
-    private String clientListFilePath; // Path to the client list file
-    private String clientDataDirectory; // Directory for individual client data files
-    private List<String> clientList; // List to store client data
+    private String clientListFilePath; // Path to the file containing the list of clients.
+    private String clientDataDirectory; // Directory where individual client data files are stored.
+    private List<String> clientList; // List storing loaded client data.
 
     /**
-     * Constructor for IOHandling.
-     * @param clientListFilePath Path to the client list file
-     * @param clientDataDirectory Directory for individual client data files
+     * Initializes paths for client data and creates necessary directories and files.
+     * @param clientListFilePath Path to the file listing all clients.
+     * @param clientDataDirectory Path to the directory where individual client data files are stored.
      */
     public IOHandling(String clientListFilePath, String clientDataDirectory) {
         this.clientListFilePath = clientListFilePath;
@@ -28,6 +28,9 @@ public class IOHandling {
         createClientListFile();
     }
 
+    /**
+     * Creates the directory to store individual client data files if it does not exist.
+     */
     private void createClientDataDirectory() {
         Path path = Paths.get(clientDataDirectory);
         if (!Files.exists(path)) {
@@ -41,6 +44,9 @@ public class IOHandling {
         }
     }
 
+    /**
+     * Creates the file that lists all clients if it does not exist.
+     */
     private void createClientListFile() {
         Path path = Paths.get(clientListFilePath);
         if (!Files.exists(path)) {
@@ -54,6 +60,9 @@ public class IOHandling {
         }
     }
 
+    /**
+     * Reads client data from the list file into memory.
+     */
     public void readClientList() {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.clientListFilePath))) {
             String line;
@@ -66,6 +75,10 @@ public class IOHandling {
         }
     }
 
+    /**
+     * Writes a client's data to the client list file.
+     * @param client Client whose data is to be written.
+     */
     public void writeClientToList(Client client) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.clientListFilePath, true))) {
             writer.write(client.toString());
@@ -76,39 +89,43 @@ public class IOHandling {
         }
     }
 
+    /**
+     * Writes or updates client-specific data in their individual data file.
+     * @param client Client whose data is to be written.
+     * @param balance Current balance of the client to be recorded.
+     */
     public void writeClientData(Client client, double balance) {
         String clientFolderPath = clientDataDirectory + "/" + client.getAccountNumber();
         String clientFilePath = clientFolderPath + "/client-info.txt";
 
-        // Create client folder
-        Path path = Paths.get(clientFolderPath);
-        if (!Files.exists(path)) {
-            try {
+        try {
+            Path path = Paths.get(clientFolderPath);
+            if (!Files.exists(path)) {
                 Files.createDirectories(path);
-            } catch (IOException e) {
-                System.out.println("Failed to create client folder.");
-                e.printStackTrace();
             }
-        }
-
-        // Write client data to client-info.txt
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(clientFilePath))) {
-            writer.write("Account Number: " + client.getAccountNumber());
-            writer.newLine();
-            writer.write("Account Holder: " + client.getFullName());
-            writer.newLine();
-            writer.write("Email: " + client.getEmail());
-            writer.newLine();
-            writer.write("Phone: " + client.getPhone());
-            writer.newLine();
-            writer.write("Balance: " + balance);
-            writer.newLine();
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(clientFilePath))) {
+                writer.write("Account Number: " + client.getAccountNumber());
+                writer.newLine();
+                writer.write("Account Holder: " + client.getFullName());
+                writer.newLine();
+                writer.write("Email: " + client.getEmail());
+                writer.newLine();
+                writer.write("Phone: " + client.getPhone());
+                writer.newLine();
+                writer.write("Balance: " + balance);
+                writer.newLine();
+            }
         } catch (IOException e) {
             System.out.println("An error occurred while writing the client data to file.");
             e.printStackTrace();
         }
     }
 
+    /**
+     * Reads account data for a given client from their data file.
+     * @param client Client whose account data is to be read.
+     * @return BankAccount object containing the account details or null if no data is found.
+     */
     public BankAccount readAccountData(Client client) {
         String clientFolderPath = clientDataDirectory + "/" + client.getAccountNumber();
         String clientFilePath = clientFolderPath + "/client-info.txt";
@@ -133,6 +150,10 @@ public class IOHandling {
         }
     }
 
+    /**
+     * Deletes all data files associated with a client.
+     * @param accountNumber Account number of the client whose data is to be deleted.
+     */
     public void removeClientData(long accountNumber) {
         String clientFolderPath = clientDataDirectory + "/" + accountNumber;
         try {
@@ -151,6 +172,8 @@ public class IOHandling {
             e.printStackTrace();
         }
     }
+
+    // Getter and setter methods for file paths
 
     public List<String> getClientList() {
         return clientList;
