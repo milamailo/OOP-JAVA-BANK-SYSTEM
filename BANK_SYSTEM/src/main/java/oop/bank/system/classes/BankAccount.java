@@ -1,4 +1,4 @@
-package oop.bank.system;
+package oop.bank.system.classes;
 
 public abstract class BankAccount {
     private long accountNumber;

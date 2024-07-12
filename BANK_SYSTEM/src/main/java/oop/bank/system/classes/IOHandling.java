@@ -1,4 +1,4 @@
-package oop.bank.system;
+package oop.bank.system.classes;
 
 import java.io.*;
 import java.nio.file.Files;
