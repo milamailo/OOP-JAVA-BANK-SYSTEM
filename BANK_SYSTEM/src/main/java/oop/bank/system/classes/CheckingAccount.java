@@ -1,4 +1,4 @@
-package oop.bank.system;
+package oop.bank.system.classes;
 
 public class CheckingAccount extends BankAccount implements IArchive {
     private double overdraftLimit;

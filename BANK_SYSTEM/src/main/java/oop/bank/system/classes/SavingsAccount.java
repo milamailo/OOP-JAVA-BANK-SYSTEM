@@ -1,4 +1,4 @@
-package oop.bank.system;
+package oop.bank.system.classes;
 
 public class SavingsAccount extends BankAccount {
     private double interestRate;

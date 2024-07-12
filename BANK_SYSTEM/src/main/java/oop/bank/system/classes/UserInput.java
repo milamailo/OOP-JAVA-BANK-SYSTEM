@@ -1,4 +1,4 @@
-package oop.bank.system;
+package oop.bank.system.classes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
