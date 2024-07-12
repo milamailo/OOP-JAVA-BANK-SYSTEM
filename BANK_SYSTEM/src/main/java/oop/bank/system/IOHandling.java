@@ -58,7 +58,6 @@ public class IOHandling {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.clientListFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 clientList.add(line);
             }
         } catch (IOException e) {
@@ -71,7 +70,6 @@ public class IOHandling {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.clientListFilePath, true))) {
             writer.write(client.toString());
             writer.newLine();
-            System.out.println("Client written to client list file: " + client);
         } catch (IOException e) {
             System.out.println("An error occurred while writing the client to the client list file.");
             e.printStackTrace();
@@ -87,7 +85,6 @@ public class IOHandling {
         if (!Files.exists(path)) {
             try {
                 Files.createDirectories(path);
-                System.out.println("Client folder created: " + clientFolderPath);
             } catch (IOException e) {
                 System.out.println("Failed to create client folder.");
                 e.printStackTrace();
@@ -106,9 +103,51 @@ public class IOHandling {
             writer.newLine();
             writer.write("Balance: " + balance);
             writer.newLine();
-            System.out.println("Client data written to file: " + clientFilePath);
         } catch (IOException e) {
             System.out.println("An error occurred while writing the client data to file.");
+            e.printStackTrace();
+        }
+    }
+
+    public BankAccount readAccountData(Client client) {
+        String clientFolderPath = clientDataDirectory + "/" + client.getAccountNumber();
+        String clientFilePath = clientFolderPath + "/client-info.txt";
+
+        if (!Files.exists(Paths.get(clientFilePath))) {
+            return null;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(clientFilePath))) {
+            String line;
+            double balance = 0.0;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Balance: ")) {
+                    balance = Double.parseDouble(line.split(": ")[1]);
+                }
+            }
+            return new CheckingAccount(client.getAccountNumber(), client.getFullName(), 200, 100, balance);
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the account data.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void removeClientData(long accountNumber) {
+        String clientFolderPath = clientDataDirectory + "/" + accountNumber;
+        try {
+            Files.walk(Paths.get(clientFolderPath))
+                    .sorted((path1, path2) -> path2.compareTo(path1))
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            System.out.println("Failed to delete client data.");
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (IOException e) {
+            System.out.println("An error occurred while deleting client data.");
             e.printStackTrace();
         }
     }

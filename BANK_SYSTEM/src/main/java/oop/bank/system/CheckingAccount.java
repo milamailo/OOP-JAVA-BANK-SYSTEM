@@ -3,6 +3,10 @@ package oop.bank.system;
 public class CheckingAccount extends BankAccount implements IArchive {
     private double overdraftLimit;
 
+    public CheckingAccount(long accountNumber, String accountHolder, double overdraftLimit, double annualFee, double balance) {
+        super(accountNumber, accountHolder, "Checking", annualFee, balance); // Pass "Checking" as the account type
+        this.overdraftLimit = overdraftLimit;
+    }
     public CheckingAccount(long accountNumber, String accountHolder, double overdraftLimit, double annualFee) {
         super(accountNumber, accountHolder, "Checking", annualFee); // Pass "Checking" as the account type
         this.overdraftLimit = overdraftLimit;

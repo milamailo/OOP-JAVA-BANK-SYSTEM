@@ -33,8 +33,11 @@ public class BankManager {
         for (String data : clientData) {
             Client client = Client.fromString(data);
             clients.add(client);
-            // Add corresponding account (this assumes a default account type; you can enhance it further)
-            BankAccount account = new CheckingAccount(client.getAccountNumber(), client.getFullName(), 200, 100);
+            // Load account data from file or initialize a new account if file not present
+            BankAccount account = ioHandling.readAccountData(client);
+            if (account == null) {
+                account = new CheckingAccount(client.getAccountNumber(), client.getFullName(), 200, 100);
+            }
             accounts.add(account);
         }
     }
@@ -54,9 +57,9 @@ public class BankManager {
         clients.add(client);
         BankAccount account;
         if (isCheckingAccount) {
-            account = new CheckingAccount(client.getAccountNumber(), client.getFullName(), 200, 100); // Set initial balance to 0
+            account = new CheckingAccount(client.getAccountNumber(), client.getFullName(), 200, 100);
         } else {
-            account = new SavingsAccount(client.getAccountNumber(), client.getFullName(), 1.5, 50); // Set initial balance to 0
+            account = new SavingsAccount(client.getAccountNumber(), client.getFullName(), 1.5, 50);
         }
         accounts.add(account);
 
@@ -75,6 +78,7 @@ public class BankManager {
         if (clientOptional.isPresent()) {
             clients.remove(clientOptional.get());
             accounts.removeIf(account -> account.getAccountNumber() == accountNumber);
+            ioHandling.removeClientData(accountNumber);
             return true;
         }
         return false;
@@ -91,7 +95,7 @@ public class BankManager {
             client.setLastName(lastName);
             client.setEmail(email);
             client.setPhone(phone);
-            ioHandling.writeClientData(client, findAccountByNumber(accountNumber).get().getBalance()); // Update client data after modification
+            ioHandling.writeClientData(client, findAccountByNumber(accountNumber).get().getBalance());
             return true;
         }
         return false;
@@ -105,7 +109,6 @@ public class BankManager {
             try {
                 if (fromAccount.get().withdraw(amount)) {
                     toAccount.get().deposit(amount);
-                    // Update client data files
                     ioHandling.writeClientData(findClientByAccountNumber(fromAccountNumber).get(), fromAccount.get().getBalance());
                     ioHandling.writeClientData(findClientByAccountNumber(toAccountNumber).get(), toAccount.get().getBalance());
                     return true;
