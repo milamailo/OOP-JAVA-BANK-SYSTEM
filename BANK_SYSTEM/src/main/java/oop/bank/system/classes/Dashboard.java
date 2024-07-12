@@ -16,6 +16,7 @@ public class Dashboard {
     public void displayMenu() {
         String choice;
         do {
+            clearScreen();
             System.out.println("\n--- Bank System Menu ---");
             System.out.println("1. List All Clients");
             System.out.println("2. Add New Client");
@@ -29,7 +30,7 @@ public class Dashboard {
             System.out.println("0. Exit");
             System.out.print("Enter choice: ");
             choice = scanner.nextLine();
-
+            clearScreen();
             switch (choice) {
                 case "1":
                     listAllClients();
@@ -75,6 +76,7 @@ public class Dashboard {
         boolean isCheckingAccount = "1".equals(answers.get("Account Type (1 for Checking, 2 for Savings)"));
         bankManager.addClient(client, isCheckingAccount);
         System.out.println("New client added successfully.");
+        pressAnyKeyToContinue();
     }
 
     private void removeClient() {
@@ -86,6 +88,7 @@ public class Dashboard {
         } else {
             System.out.println("Failed to remove client.");
         }
+        pressAnyKeyToContinue();
     }
 
     private void updateClientDetails() {
@@ -105,6 +108,7 @@ public class Dashboard {
         } else {
             System.out.println("Failed to update client.");
         }
+        pressAnyKeyToContinue();
     }
 
     private void depositFunds() {
@@ -118,6 +122,7 @@ public class Dashboard {
         } else {
             System.out.println("Deposit failed.");
         }
+        pressAnyKeyToContinue();
     }
 
     private void withdrawFunds() {
@@ -135,6 +140,7 @@ public class Dashboard {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        pressAnyKeyToContinue();
     }
 
     private void transferFunds() {
@@ -149,18 +155,46 @@ public class Dashboard {
         } else {
             System.out.println("Transfer failed.");
         }
+        pressAnyKeyToContinue();
     }
 
     private void exportToCSV() {
         System.out.println("Export to CSV feature not implemented yet.");
+        pressAnyKeyToContinue();
     }
 
     private void listAllClients() {
         System.out.println("\nListing All Clients:");
         bankManager.listAllClients().forEach(client -> System.out.println(client));
+        pressAnyKeyToContinue();
     }
 
     private void printAccountSummaries() {
         bankManager.printAccountSummaries();
+        pressAnyKeyToContinue();
+    }
+    private void clearScreen() {
+        try {
+            final String os = System.getProperty("os.name");
+            if (os.contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            System.out.println("\n");
+        }
+    }
+
+    private void pressAnyKeyToContinue() {
+        System.out.println("Press Enter key to continue...");
+        clearInputBuffer();
+        scanner.nextLine();
+    }
+
+    private void clearInputBuffer() {
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
     }
 }
