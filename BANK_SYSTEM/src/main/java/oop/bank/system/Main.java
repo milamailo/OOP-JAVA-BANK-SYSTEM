@@ -11,7 +11,7 @@ import oop.bank.system.classes.Dashboard;
 public class Main {
     public static void main(String[] args) {
         // Path to the text file containing client information.
-        String clientListFilePath = "data/client-list.txt";
+        String clientListFilePath = "data/client-list.bin";
 
         // Directory path where individual client data files are stored.
         String clientDataDirectory = "data/clientData";
