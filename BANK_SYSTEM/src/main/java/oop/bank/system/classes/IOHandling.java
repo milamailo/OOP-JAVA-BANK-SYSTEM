@@ -64,12 +64,12 @@ public class IOHandling {
      * Reads client data from the list file into memory.
      */
     public void readClientList() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(this.clientListFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                clientList.add(line);
-            }
-        } catch (IOException e) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(clientListFilePath))) {
+            clientList = (List<String>) ois.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("Client list file not found. Initializing empty list.");
+            clientList = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while reading the client list.");
             e.printStackTrace();
         }
@@ -80,15 +80,17 @@ public class IOHandling {
      * @param client Client whose data is to be written.
      */
     public void writeClientToList(Client client) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.clientListFilePath, true))) {
-            writer.write(client.toString());
-            writer.newLine();
+        clientList.add(String.valueOf(client).toString());
+        writeClientList();
+    }
+    public void writeClientList() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(clientListFilePath))) {
+            oos.writeObject(clientList);
         } catch (IOException e) {
-            System.out.println("An error occurred while writing the client to the client list file.");
+            System.out.println("An error occurred while writing the client list file.");
             e.printStackTrace();
         }
     }
-
     /**
      * Writes or updates client-specific data in their individual data file.
      * @param client Client whose data is to be written.
